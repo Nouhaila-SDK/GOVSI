@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Team Management - GovSI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span>GovSI</span>
+        <small>Manager</small>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard-manager.html"><span>🏠</span> Dashboard</a></li>
+          <li><a href="projects.html"><span>📁</span> My Projects</a></li>
+          <li><a href="tasks.html"><span>📋</span> Tasks</a></li>
+          <li class="active"><a href="team.html"><span>👥</span> Team</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Team Management</h1>
+        <p>View and manage your team members</p>
+        <button class="btn btn-primary">+ Add Member</button>
+      </header>
+
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-header">
+            <div class="avatar">SC</div>
+            <div class="team-info">
+              <h3>Sarah Chen</h3>
+              <p>Senior Developer</p>
+            </div>
+          </div>
+          <div class="allocation">
+            <label>Allocation</label>
+            <div class="progress">
+              <div class="progress-bar" style="width: 85%;"></div>
+              <span>85%</span>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <h4>3</h4>
+              <p>Active Tasks</p>
+            </div>
+            <div class="stat">
+              <h4>15</h4>
+              <p>Completed</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+        <div class="team-card">
+          <div class="team-header">
+            <div class="avatar">JS</div>
+            <div class="team-info">
+              <h3>John Smith</h3>
+              <p>Developer</p>
+            </div>
+          </div>
+          <div class="allocation">
+            <label>Allocation</label>
+            <div class="progress">
+              <div class="progress-bar" style="width: 90%;"></div>
+              <span>90%</span>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <h4>4</h4>
+              <p>Active Tasks</p>
+            </div>
+            <div class="stat">
+              <h4>22</h4>
+              <p>Completed</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+        <div class="team-card">
+          <div class="team-header">
+            <div class="avatar">ED</div>
+            <div class="team-info">
+              <h3>Emma Davis</h3>
+              <p>Designer</p>
+            </div>
+          </div>
+          <div class="allocation">
+            <label>Allocation</label>
+            <div class="progress">
+              <div class="progress-bar" style="width: 75%;"></div>
+              <span>75%</span>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <h4>2</h4>
+              <p>Active Tasks</p>
+            </div>
+            <div class="stat">
+              <h4>18</h4>
+              <p>Completed</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+        <div class="team-card">
+          <div class="team-header">
+            <div class="avatar">AJ</div>
+            <div class="team-info">
+              <h3>Alex Johnson</h3>
+              <p>Product Manager</p>
+            </div>
+          </div>
+          <div class="allocation">
+            <label>Allocation</label>
+            <div class="progress">
+              <div class="progress-bar" style="width: 95%;"></div>
+              <span>95%</span>
+            </div>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <h4>5</h4>
+              <p>Active Tasks</p>
+            </div>
+            <div class="stat">
+              <h4>28</h4>
+              <p>Completed</p>
+            </div>
+          </div>
+          <button class="btn btn-secondary">View Details</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

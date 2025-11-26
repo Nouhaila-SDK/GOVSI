@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Projects - GovSI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span>GovSI</span>
+        <small>Manager</small>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard-manager.html"><span>🏠</span> Dashboard</a></li>
+          <li class="active"><a href="projects.html"><span>📁</span> My Projects</a></li>
+          <li><a href="tasks.html"><span>📋</span> Tasks</a></li>
+          <li><a href="team.html"><span>👥</span> Team</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>My Projects</h1>
+        <p>Manage your assigned projects</p>
+        <button class="btn btn-primary">+ New Project</button>
+      </header>
+
+      <div class="project-list">
+        <div class="project-card">
+          <div class="project-header">
+            <h3>Mobile App Redesign</h3>
+            <span class="status active">active</span>
+          </div>
+          <p>Complete redesign of the mobile application UI/UX</p>
+          <div class="progress">
+            <div class="progress-bar" style="width: 65%;"></div>
+            <span>65%</span>
+          </div>
+          <div class="team-info">
+            <div class="avatars">
+              <span class="avatar">1</span>
+              <span class="avatar">2</span>
+              <span class="avatar">3</span>
+              <span class="avatar">+5</span>
+            </div>
+            <span>8 team</span>
+          </div>
+          <div class="due-date">Dec 20</div>
+        </div>
+        <div class="project-card">
+          <div class="project-header">
+            <h3>Backend API Migration</h3>
+            <span class="status active">active</span>
+          </div>
+          <p>Migrate legacy API to microservices architecture</p>
+          <div class="progress">
+            <div class="progress-bar" style="width: 42%;"></div>
+            <span>42%</span>
+          </div>
+          <div class="team-info">
+            <div class="avatars">
+              <span class="avatar">1</span>
+              <span class="avatar">2</span>
+              <span class="avatar">3</span>
+              <span class="avatar">+2</span>
+            </div>
+            <span>5 team</span>
+          </div>
+          <div class="due-date">Jan 15</div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

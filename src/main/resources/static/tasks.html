@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task Management - GovSI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span>GovSI</span>
+        <small>Manager</small>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="dashboard-manager.html"><span>🏠</span> Dashboard</a></li>
+          <li><a href="projects.html"><span>📁</span> My Projects</a></li>
+          <li class="active"><a href="tasks.html"><span>📋</span> Tasks</a></li>
+          <li><a href="team.html"><span>👥</span> Team</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Task Management</h1>
+        <p>Manage and track all team tasks</p>
+        <button class="btn btn-primary">+ Create Task</button>
+      </header>
+
+      <div class="filters">
+        <div class="filter-group">
+          <label>Status</label>
+          <div class="filter-buttons">
+            <button class="btn btn-secondary active">Active</button>
+            <button class="btn btn-secondary">Completed</button>
+            <button class="btn btn-secondary">All</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label>Priority</label>
+          <div class="filter-buttons">
+            <button class="btn btn-secondary active">All</button>
+            <button class="btn btn-secondary">Low</button>
+            <button class="btn btn-secondary">Medium</button>
+            <button class="btn btn-secondary">High</button>
+            <button class="btn btn-secondary">Critical</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-list">
+        <div class="task-item">
+          <div class="task-checkbox">☐</div>
+          <div class="task-details">
+            <h3>Review design mockups</h3>
+            <p>Sarah Chen</p>
+          </div>
+          <div class="task-project">Mobile App Redesign</div>
+          <div class="task-priority high">high</div>
+          <div class="task-due">Dec 10</div>
+        </div>
+        <div class="task-item">
+          <div class="task-checkbox">☐</div>
+          <div class="task-details">
+            <h3>Client presentation</h3>
+            <p>John Smith</p>
+          </div>
+          <div class="task-project">Mobile App Redesign</div>
+          <div class="task-priority critical">critical</div>
+          <div class="task-due">Dec 12</div>
+        </div>
+        <div class="task-item">
+          <div class="task-checkbox">☐</div>
+          <div class="task-details">
+            <h3>Code review: API endpoints</h3>
+            <p>Emma Davis</p>
+          </div>
+          <div class="task-project">Backend API Migration</div>
+          <div class="task-priority medium">medium</div>
+          <div class="task-due">Dec 15</div>
+        </div>
+        <div class="task-item">
+          <div class="task-checkbox">☐</div>
+          <div class="task-details">
+            <h3>Set up CI/CD pipeline</h3>
+            <p>Sarah Chen</p>
+          </div>
+          <div class="task-project">Backend API Migration</div>
+          <div class="task-priority high">high</div>
+          <div class="task-due">Dec 20</div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

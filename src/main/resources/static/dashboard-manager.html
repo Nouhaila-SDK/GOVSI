@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Manager Dashboard - GovSI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">⚡</div>
+        <span>GovSI</span>
+        <small>Manager</small>
+      </div>
+      <nav>
+        <ul>
+          <li class="active"><a href="dashboard-manager.html"><span>🏠</span> Dashboard</a></li>
+          <li><a href="projects.html"><span>📁</span> My Projects</a></li>
+          <li><a href="tasks.html"><span>📋</span> Tasks</a></li>
+          <li><a href="team.html"><span>👥</span> Team</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Project Manager Dashboard</h1>
+        <p>Manage your projects and teams</p>
+        <button class="btn btn-primary">+ New Project</button>
+      </header>
+
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="card">
+          <div class="card-header">
+            <h3>Active Projects</h3>
+            <div class="icon">📋</div>
+          </div>
+          <div class="card-body">
+            <h2>6</h2>
+            <p>2 at risk</p>
+            <p class="trend">+2% from last month</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Team Members</h3>
+            <div class="icon">👥</div>
+          </div>
+          <div class="card-body">
+            <h2>24</h2>
+            <p>All available</p>
+            <p class="trend">+5% from last month</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Pending Tasks</h3>
+            <div class="icon">📋</div>
+          </div>
+          <div class="card-body">
+            <h2>47</h2>
+            <p>12 due this week</p>
+            <p class="trend red">8% from last month</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Team Capacity</h3>
+            <div class="icon">⚡</div>
+          </div>
+          <div class="card-body">
+            <h2>78%</h2>
+            <p>Well utilized</p>
+            <p class="trend">+3% from last month</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Projects Section -->
+      <section class="section">
+        <h2>My Projects</h2>
+        <div class="project-list">
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Mobile App Redesign</h3>
+              <span class="status active">active</span>
+            </div>
+            <p>Complete redesign of the mobile application UI/UX</p>
+            <div class="progress">
+              <div class="progress-bar" style="width: 65%;"></div>
+              <span>65%</span>
+            </div>
+            <div class="team-info">
+              <div class="avatars">
+                <span class="avatar">1</span>
+                <span class="avatar">2</span>
+                <span class="avatar">3</span>
+                <span class="avatar">+5</span>
+              </div>
+              <span>8 team</span>
+            </div>
+            <div class="due-date">Dec 20</div>
+          </div>
+          <div class="project-card">
+            <div class="project-header">
+              <h3>Backend API Migration</h3>
+              <span class="status active">active</span>
+            </div>
+            <p>Migrate legacy API to microservices architecture</p>
+            <div class="progress">
+              <div class="progress-bar" style="width: 42%;"></div>
+              <span>42%</span>
+            </div>
+            <div class="team-info">
+              <div class="avatars">
+                <span class="avatar">1</span>
+                <span class="avatar">2</span>
+                <span class="avatar">3</span>
+                <span class="avatar">+2</span>
+              </div>
+              <span>5 team</span>
+            </div>
+            <div class="due-date">Jan 15</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Due This Week -->
+      <section class="section">
+        <h2>Due This Week</h2>
+        <div class="task-list">
+          <div class="task-item">
+            <div class="task-checkbox">☐</div>
+            <div class="task-details">
+              <h3>Review design mockups</h3>
+              <p>Sarah Chen</p>
+            </div>
+            <div class="task-priority high">high</div>
+            <div class="task-due">Tomorrow</div>
+          </div>
+          <div class="task-item">
+            <div class="task-checkbox">☐</div>
+            <div class="task-details">
+              <h3>Client presentation</h3>
+              <p>John Smith</p>
+            </div>
+            <div class="task-priority critical">critical</div>
+            <div class="task-due">Wed</div>
+          </div>
+          <div class="task-item">
+            <div class="task-checkbox">☐</div>
+            <div class="task-details">
+              <h3>Code review: API endpoints</h3>
+              <p>Emma Davis</p>
+            </div>
+            <div class="task-priority medium">medium</div>
+            <div class="task-due">Thu</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
