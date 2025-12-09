@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>GSI</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src/main/resources/static/Dash.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/Dash.html</location>
+		</link>
+		<link>
+			<name>src/main/resources/static/Historique.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/Historique.html</location>
+		</link>
+		<link>
+			<name>src/main/resources/static/RapportsDécisionnels.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/RapportsDécisionnels.html</location>
+		</link>
+		<link>
+			<name>src/main/resources/static/Ressources.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/Ressources.html</location>
+		</link>
+		<link>
+			<name>src/main/resources/static/Risques.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/Risques.html</location>
+		</link>
+		<link>
+			<name>src/main/resources/static/directeur1.html</name>
+			<type>1</type>
+			<location>C:/Users/THINKPAD/Downloads/MGSI-7/G- JEE/3- Projets/PagesHTML/directeur1.html</location>
+		</link>
+	</linkedResources>
+</projectDescription>
