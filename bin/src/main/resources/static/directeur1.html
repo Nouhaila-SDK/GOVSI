@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI - Directeur - Vue sur les Projets</title>
+    <style>
+        /* 🎨 DÉBUT DU CODE CSS COMPLET MIS À JOUR */
+        :root {
+            --color-primary: #3d5a80; 
+            --color-secondary: #f4f1de; 
+            --color-text: #333333;
+            --color-success: #4CAF50;
+            --color-warning: #FFC107;
+            --color-danger: #D32F2F;
+            --color-danger-sable: #d9534f; 
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-primary);
+        }
+
+        #header-bar {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center; 
+        }
+
+        main {
+            max-width: 1500px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: block; 
+        }
+
+        #project-crud-section {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #ffffff 50%, #eff2f8 100%); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        #controls-bar {
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-primary);
+            padding-bottom: 15px;
+        }
+
+        .search-add-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #search-bar {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+
+        .add-btn {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        .add-btn:hover:not(:disabled) {
+            background-color: #2a3c50; 
+        }
+
+        #projects-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white; 
+            border-radius: 6px;
+            overflow: hidden; 
+        }
+
+        #projects-table th {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        #projects-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eeeeee;
+            transition: background-color 0.2s;
+            cursor: pointer; 
+        }
+
+        /* Style pour les détails de ressources (et maintenant Teamwork) */
+        #projects-table td div {
+            padding: 2px 0;
+            font-size: 13px;
+            white-space: normal; /* Permet le retour à la ligne dans les cellules complexes */
+        }
+        
+        /* Affichage des membres de l'équipe */
+        .teamwork-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .teamwork-member {
+            background-color: #e0e7f4;
+            color: var(--color-primary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        
+        /* CORRECTION APPLIQUÉE POUR LA DERNIÈRE CELLULE D'ACTIONS */
+        #projects-table td:last-child { 
+            white-space: nowrap; 
+            display: flex; 
+            gap: 5px; 
+            padding: 12px 5px 12px 15px; 
+        }
+        /* FIN DE LA CORRECTION */
+
+        #projects-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        #projects-table tbody tr.selected-row {
+            background-color: #e6e9f0; 
+            border-left: 5px solid var(--color-primary);
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        .running { background-color: var(--color-success); }
+        .completed { background-color: var(--color-primary); }
+        .suspended { background-color: var(--color-warning); color: var(--color-text); }
+        .risk.high { color: var(--color-danger); font-weight: bold; }
+        .risk.medium { color: orange; font-weight: bold; } /* Ajout style medium */
+        .risk.low { color: var(--color-success); font-weight: bold; } /* Ajout style low */
+
+
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            border: 1px solid var(--color-primary);
+            background-color: white;
+            color: var(--color-primary);
+        }
+
+        .edit-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+
+        .delete-btn {
+            border: 1px solid var(--color-danger-sable);
+            background-color: var(--color-danger-sable);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c9302c; 
+        }
+
+        #comment-section {
+            background: linear-gradient(135deg, #ffffff 0%, var(--color-secondary) 100%);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid var(--color-primary);
+        }
+        
+        #selected-project-info {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #e6e9f0; 
+            border-left: 3px solid var(--color-primary);
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        #comment-input {
+            width: 100%;
+            height: 80px; 
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        #post-comment-btn {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #comments-list {
+            margin-top: 20px;
+            border-top: 1px dashed #ccc;
+            padding-top: 15px;
+            max-height: 250px; 
+            overflow-y: auto;
+            padding-right: 10px; 
+        }
+
+        .comment-item {
+            background-color: white; 
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-right: 10px;
+        }
+
+        /* Styles Modales */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        .modal-content {
+            background-color: var(--color-secondary);
+            margin: 5% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            border-top: 5px solid var(--color-primary);
+        }
+
+        .large-modal {
+            max-width: 900px; 
+            width: 90%;
+        }
+
+        .close-btn {
+            color: var(--color-primary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover, .close-btn:focus {
+            color: var(--color-text);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #project-form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        #project-form input[type="text"], 
+        #project-form input[type="number"],
+        #project-form input[type="date"],
+        #project-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        #project-form textarea {
+            resize: vertical;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            width: 45%;
+            padding: 12px;
+            margin-right: 10px;
+        }
+        
+        #project-form #cancel-modal-btn {
+            width: 45%;
+            background-color: #ccc;
+            color: var(--color-text);
+            border: 1px solid #aaa;
+            padding: 10px 20px;
+        }
+        #project-form #cancel-modal-btn:hover {
+            background-color: #bbb;
+            color: var(--color-text);
+        }
+
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-column h3 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        .risk-objective-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .risk-objective-group > div {
+            flex: 1;
+        }
+
+        .alert-box {
+            text-align: center;
+            max-width: 400px;
+            border-top: 5px solid var(--color-danger-sable);
+        }
+
+        .alert-title {
+            color: var(--color-danger-sable);
+        }
+
+        .alert-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        #confirm-delete-btn, #cancel-delete-btn {
+            width: 45%;
+            padding: 10px;
+        }
+        /* 🎨 FIN DU CODE CSS COMPLET MIS À JOUR */
+    </style>
+</head>
+<body>
+    <header id="header-bar">
+        <span>Directeur - Vue sur les Projets</span>
+    </header>
+
+    <main>
+        <section id="project-crud-section">
+            <div id="controls-bar">
+                <div class="search-add-group">
+                    <input type="text" id="search-bar" placeholder="Rechercher par Nom du Projet ou Chef de Département...">
+                    <button class="add-btn" id="add-project-btn">+ Ajouter un Nouveau Projet</button>
+                </div>
+            </div>
+
+            <div id="projects-table-container">
+                <table id="projects-table">
+                    <thead>
+                        <tr>
+                            <th>Projet</th>
+                            <th>Département</th>
+                            <th>Chef de Projet</th>
+                            <th>Chef de Dép.</th>
+                            <th>Statut</th>
+                            <th>Risque</th>
+                            <th>Prog. Obj.</th>
+                            <th>Teamwork</th>
+                            <th>Ressources Affectées</th>
+                            <th>Budget Alloué</th>
+                            <th>DPF</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-project-id="1">
+                            <td>Refonte ERP Module Finance</td>
+                            <td>Finance</td>
+                            <td>Elouardi M.</td>
+                            <td>Bennani A.</td>
+                            <td><span class="status running">En Cours</span></td>
+                            <td><span class="risk high">4/5</span></td>
+                            <td>65%</td>
+                            <td>
+                                <div class="teamwork-list">
+                                    <span class="teamwork-member">Elouardi M.</span>
+                                    <span class="teamwork-member">Daoudi A.</span>
+                                    <span class="teamwork-member">Bennani S.</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>1 x **Serveur Alpha Web**</div>
+                                <div>2 x **Licence SQL 2022**</div>
+                                <div>2 x **Consultants Externes**</div>
+                            </td>
+                            <td>320 000 DH</td>
+                            <td>30/06/2026</td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                        
+                        <tr data-project-id="2">
+                            <td>Migration Cloud CRM</td>
+                            <td>Commercial</td>
+                            <td>Sbai Y.</td>
+                            <td>Alaoui F.</td>
+                            <td><span class="status completed">Terminé</span></td>
+                            <td><span class="risk low">1/5</span></td>
+                            <td>100%</td>
+                            <td>
+                                <div class="teamwork-list">
+                                    <span class="teamwork-member">Sbai Y.</span>
+                                    <span class="teamwork-member">Khalil N.</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>1 x **Licence Azure**</div>
+                                <div>1 x **Serveur Beta**</div>
+                            </td>
+                            <td>150 000 DH</td>
+                            <td>15/10/2025</td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                        
+                        <tr data-project-id="3">
+                            <td>Développement App Mobile RH</td>
+                            <td>Ressources Humaines</td>
+                            <td>Daoudi H.</td>
+                            <td>Alaoui F.</td>
+                            <td><span class="status suspended">Suspendu</span></td>
+                            <td><span class="risk medium">3/5</span></td>
+                            <td>15%</td>
+                             <td>
+                                <div class="teamwork-list">
+                                    <span class="teamwork-member">Daoudi H.</span>
+                                    <span class="teamwork-member">Ziani M.</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div>10 x **Licence Dev Mobile**</div>
+                            </td>
+                            <td>80 000 DH</td>
+                            <td>--</td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="comment-section">
+            <h2>🗒️ Notes et Commentaires du Directeur</h2>
+            <p>Veuillez sélectionner un projet dans le tableau ci-dessus pour visualiser ou ajouter des remarques stratégiques.</p>
+            <div id="selected-project-info">
+                <strong>Projet sélectionné :</strong> <span id="selected-project-title">Aucun</span>
+            </div>
+            
+            <textarea id="comment-input" placeholder="Ajouter une remarque stratégique sur ce projet..."></textarea>
+            <button class="add-btn" id="post-comment-btn" disabled>Poster le Commentaire</button>
+
+            <div id="comments-list">
+                <div class="comment-item">
+                    <span class="comment-author">Directeur</span>
+                    <span class="comment-date">01/12/2025</span>
+                    <p>Le taux de risque sur le projet ERP est critique (4/5). Un plan de mitigation d'urgence est requis.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="project-modal" class="modal">
+        <div class="modal-content large-modal">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Ajouter/Modifier un Projet</h2>
+            
+            <form id="project-form">
+                <input type="hidden" id="project_id" name="id">
+                
+                <div class="form-group-grid">
+                    <div class="form-column">
+                        <h3>Détails du Projet</h3>
+                        
+                        <label for="projet_nom">Nom du Projet (*):</label>
+                        <input type="text" id="projet_nom" name="nom" required>
+                        
+                        <label for="projet_departement">Département Associé (*):</label>
+                        <select id="projet_departement" name="departement" required>
+                            <option value="">-- Choisir --</option>
+                            <option value="Finance">Finance</option>
+                            <option value="RH">Ressources Humaines</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="IT">Informatique</option>
+                        </select>
+                        
+                        <label for="projet_status">Statut (*):</label>
+                        <select id="projet_status" name="status" required>
+                            <option value="En cours">En cours</option>
+                            <option value="Terminé">Terminé</option>
+                            <option value="Suspendu">Suspendu</option>
+                        </select>
+
+                        <label for="projet_budget">Budget Alloué (DH) (*):</label>
+                        <input type="number" id="projet_budget" name="budgetAlloue" required min="0">
+
+                    </div>
+
+                    <div class="form-column">
+                        <h3>Responsables et Calendrier</h3>
+                        
+                        <label for="projet_chef">Chef de Projet (*):</label>
+                        <input type="text" id="projet_chef" name="chefProjet" required>
+                        
+                        <label for="projet_chef_dep">Chef de Département (*):</label>
+                        <input type="text" id="projet_chef_dep" name="chefDepartement" required>
+
+                        <label for="projet_date_debut">Date de Début (*):</label>
+                        <input type="date" id="projet_date_debut" name="dateDebut" required>
+                        
+                        <label for="projet_date_fin_prevu">Date Prévue de Fin (*):</label>
+                        <input type="date" id="projet_date_fin_prevu" name="dateFinPrevue" required>
+                        
+                        <label for="projet_date_fin_reelle">Date de Fin Réelle:</label>
+                        <input type="date" id="projet_date_fin_reelle" name="dateFinReelle">
+                    </div>
+                </div>
+                
+                <hr>
+
+                <div class="form-group-full">
+                    <h3>Gestion des Risques & Ressources</h3>
+                    
+                    <div class="risk-objective-group">
+                        <div>
+                            <label for="projet_taux_risque">Taux de Risque (1-5) (*):</label>
+                            <input type="number" id="projet_taux_risque" name="tauxRisque" required min="1" max="5">
+                        </div>
+                        <div>
+                            <label for="projet_objectifs">Objectifs Atteints (%):</label>
+                            <input type="number" id="projet_objectifs" name="objectifsAtteints" min="0" max="100" value="0">
+                        </div>
+                    </div>
+
+                    <label for="projet_membres_equipe">Membres de l'équipe (Séparés par une virgule):</label>
+                    <textarea id="projet_membres_equipe" name="membresEquipe" placeholder="Ex: Dupont J., Martin A., Leroy C."></textarea>
+                    
+                    <label for="projet_ressources_affectees">Ressources Affectées (Qté x Nom de la Ressource, une par ligne):</label>
+                    <textarea id="projet_ressources_affectees" name="ressourcesAffectees" placeholder="Ex: 1 x Serveur Alpha&#10;2 x Licence SQL 2022"></textarea>
+                </div>
+                
+                <button type="submit" class="add-btn submit-btn" id="submit-project-btn">Enregistrer</button>
+                <button type="button" class="action-btn edit-btn" id="cancel-modal-btn">Annuler</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-alert" class="modal">
+        <div class="modal-content alert-box">
+            <h2 class="alert-title">Confirmation de Suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer le projet <strong id="project-to-delete-name">Nom du Projet</strong> ?</p>
+            <div class="alert-actions">
+                <button id="confirm-delete-btn" class="action-btn delete-btn">Oui, Supprimer</button>
+                <button id="cancel-delete-btn" class="action-btn edit-btn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.getElementById('projects-table');
+            const selectedTitle = document.getElementById('selected-project-title');
+            const postBtn = document.getElementById('post-comment-btn');
+            const searchBar = document.getElementById('search-bar');
+            let selectedRow = null;
+            let projectIdToDelete = null; 
+
+            const modal = document.getElementById('project-modal');
+            const deleteAlert = document.getElementById('delete-alert');
+            const addBtn = document.getElementById('add-project-btn');
+            const closeBtn = document.querySelector('#project-modal .close-btn');
+            const modalTitle = document.getElementById('modal-title');
+            const projectForm = document.getElementById('project-form');
+            const submitBtn = document.getElementById('submit-project-btn');
+
+            // Fonction utilitaire pour convertir le HTML des membres en une chaîne de texte
+            const getTeamMembersText = (cell) => {
+                const members = Array.from(cell.querySelectorAll('.teamwork-member')).map(span => span.textContent.trim());
+                return members.join(', ');
+            };
+            
+            const openModal = (mode, data = {}) => {
+                projectForm.reset();
+                
+                if (mode === 'add') {
+                    modalTitle.textContent = "Ajouter un Nouveau Projet";
+                    submitBtn.textContent = "Créer le Projet";
+                    document.getElementById('project_id').value = ''; 
+                } else if (mode === 'edit') {
+                    modalTitle.textContent = `Modifier le Projet: ${data.nom || 'Sélectionné'}`;
+                    submitBtn.textContent = "Sauvegarder les Modifications";
+                    
+                    // --- Simulation de chargement des données pour la modification ---
+                    document.getElementById('project_id').value = data.id;
+                    document.getElementById('projet_nom').value = data.nom;
+                    document.getElementById('projet_chef').value = data.chefProjet;
+                    document.getElementById('projet_departement').value = data.departement;
+                    document.getElementById('projet_status').value = data.status;
+                    document.getElementById('projet_budget').value = data.budgetAlloue.replace(/[^0-9]/g, '').trim(); 
+                    document.getElementById('projet_taux_risque').value = data.tauxRisque.charAt(0); 
+                    document.getElementById('projet_objectifs').value = data.objectifsAtteints.replace('%', '').trim();
+                    
+                    // Charger les membres de l'équipe (nouvelle cellule)
+                    document.getElementById('projet_membres_equipe').value = data.teamwork;
+                    
+                    // Simuler le chargement des ressources
+                    const resourceTextarea = document.getElementById('projet_ressources_affectees');
+                    if (data.id === '1') {
+                        resourceTextarea.value = "1 x Serveur Alpha\n2 x Licence SQL 2022\n2 x Consultants Externes";
+                    } else if (data.id === '2') {
+                        resourceTextarea.value = "1 x Licence Azure\n1 x Serveur Beta";
+                    } else if (data.id === '3') {
+                        resourceTextarea.value = "10 x Licence Dev Mobile";
+                    } else {
+                         resourceTextarea.value = "";
+                    }
+
+                    // Les autres champs comme DPF, Dates, Chefs, etc. doivent aussi être chargés
+                }
+                modal.style.display = "block";
+            };
+
+            const closeModal = () => {
+                modal.style.display = "none";
+            };
+
+            addBtn.addEventListener('click', () => openModal('add'));
+            closeBtn.addEventListener('click', closeModal);
+            document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+                if (event.target == deleteAlert) {
+                    deleteAlert.style.display = "none";
+                }
+            }
+            
+            projectForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const projectId = document.getElementById('project_id').value;
+                const action = projectId ? 'Modification' : 'Ajout';
+                
+                alert(`${action} du projet soumise (API call to be implemented) !`);
+                closeModal();
+            });
+
+            searchBar.addEventListener('keyup', () => {
+                const filter = searchBar.value.toLowerCase();
+                table.querySelectorAll('tbody tr').forEach(row => {
+                    const project = row.cells[0].textContent.toLowerCase();
+                    const chefDep = row.cells[3].textContent.toLowerCase();
+                    
+                    if (project.includes(filter) || chefDep.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            table.querySelectorAll('tbody tr').forEach(row => {
+                
+                row.addEventListener('click', (e) => {
+                    // Les cellules d'actions ou les boutons ne doivent pas déclencher l'événement de sélection de ligne
+                    if (e.target.closest('.action-btn') || e.target.closest('td:last-child')) return; 
+
+                    if (selectedRow) selectedRow.classList.remove('selected-row');
+                    selectedRow = row;
+                    row.classList.add('selected-row');
+
+                    selectedTitle.textContent = row.cells[0].textContent;
+                    postBtn.disabled = false;
+                    
+                    document.getElementById('comment-section').scrollIntoView({ behavior: 'smooth' });
+                });
+
+                row.querySelector('.edit-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    
+                    const projectData = {
+                        id: row.dataset.projectId,
+                        nom: row.cells[0].textContent,
+                        departement: row.cells[1].textContent,
+                        chefProjet: row.cells[2].textContent,
+                        status: row.cells[4].textContent.trim(),
+                        tauxRisque: row.cells[5].textContent,
+                        objectifsAtteints: row.cells[6].textContent,
+                        // NOUVEL INDEX POUR TEAMWORK (cellule 7)
+                        teamwork: getTeamMembersText(row.cells[7]), 
+                        // NOUVEL INDEX POUR BUDGET (cellule 9 - était 8)
+                        budgetAlloue: row.cells[9].textContent, 
+                    };
+                    openModal('edit', projectData);
+                });
+
+                row.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    projectIdToDelete = row.dataset.projectId;
+                    document.getElementById('project-to-delete-name').textContent = row.cells[0].textContent;
+                    deleteAlert.style.display = "block";
+                });
+            });
+
+            document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+                alert(`Suppression du projet ID ${projectIdToDelete} confirmée (API call to be implemented)!`);
+                deleteAlert.style.display = "none";
+            });
+
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+                deleteAlert.style.display = "none";
+                projectIdToDelete = null;
+            });
+            
+            document.getElementById('post-comment-btn').addEventListener('click', () => {
+                const comment = document.getElementById('comment-input').value.trim();
+                const projectName = selectedTitle.textContent;
+                
+                if (comment && selectedRow) {
+                    alert(`Commentaire pour ${projectName} : "${comment}" a été posté ! (API call to be implemented)`);
+                    document.getElementById('comment-input').value = '';
+                } else if (!comment) {
+                    alert("Veuillez entrer un commentaire.");
+                } else if (!selectedRow) {
+                    alert("Veuillez sélectionner un projet avant de poster.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

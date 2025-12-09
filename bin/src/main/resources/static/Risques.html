@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI - Directeur - Gestion des Risques</title>
+    
+    <style>
+        /* 🎨 DÉBUT DU CODE CSS (Réutilisé et adapté des pages précédentes) */
+        :root {
+            --color-primary: #3d5a80;   
+            --color-secondary: #f4f1de; 
+            --color-text: #333333;
+            --color-success: #4CAF50;
+            --color-warning: #FFC107;
+            --color-danger: #D32F2F;
+            --color-danger-sable: #d9534f; 
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-primary);
+        }
+
+        #header-bar {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center; 
+        }
+
+        main {
+            max-width: 1500px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: block; 
+        }
+
+        #risk-crud-section {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #ffffff 50%, #eff2f8 100%); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        #controls-bar {
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-primary);
+            padding-bottom: 15px;
+        }
+
+        .search-add-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #search-bar {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+
+        .add-btn {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        .add-btn:hover:not(:disabled) {
+            background-color: #2a3c50; 
+        }
+
+        /* Tableau des Risques */
+        #risks-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white; 
+            border-radius: 6px;
+            overflow: hidden; 
+        }
+
+        #risks-table th {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        #risks-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eeeeee;
+            transition: background-color 0.2s;
+        }
+        
+        /* Cellules contenant des listes d'éléments (risques, objectifs, actions) */
+        #risks-table td div {
+            padding: 2px 0;
+            font-size: 13px;
+        }
+
+        #risks-table td:last-child { 
+            white-space: nowrap; 
+            display: flex; 
+            gap: 5px; 
+            padding: 12px 5px 12px 15px; 
+        }
+
+        #risks-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Indicateurs de Risque */
+        .risk-level {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        .level-low { background-color: var(--color-success); }
+        .level-medium { background-color: #FFA500; } /* Orange */
+        .level-high { background-color: var(--color-danger); }
+
+        /* Styles CRUD */
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            border: 1px solid var(--color-primary);
+            background-color: white;
+            color: var(--color-primary);
+        }
+
+        .delete-btn {
+            border: 1px solid var(--color-danger-sable);
+            background-color: var(--color-danger-sable);
+            color: white;
+        }
+        
+        /* Styles Modales */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        .modal-content {
+            background-color: var(--color-secondary);
+            margin: 5% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 700px; /* Plus large pour ce formulaire */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            border-top: 5px solid var(--color-primary);
+        }
+        
+        .close-btn {
+            color: var(--color-primary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        #risk-form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        #risk-form input[type="text"], 
+        #risk-form select,
+        #risk-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .submit-btn {
+            margin-top: 20px;
+            width: 45%;
+            padding: 12px;
+            margin-right: 10px;
+        }
+        
+        #risk-form #cancel-modal-btn {
+            width: 45%;
+            background-color: #ccc;
+            color: var(--color-text);
+            border: 1px solid #aaa;
+            padding: 10px 20px;
+        }
+
+        .alert-box {
+            max-width: 400px;
+        }
+        /* 🎨 FIN DU CODE CSS */
+    </style>
+</head>
+<body>
+    <header id="header-bar">
+        <span>Gouvernance SI - Gestion Macro des Risques</span>
+    </header>
+
+    <main>
+        <section id="risk-crud-section">
+           
+            <div id="controls-bar">
+                <div class="search-add-group">
+                    <input type="text" id="search-bar" placeholder="Rechercher par Projet ou Département...">
+                    <button class="add-btn" id="add-risk-btn">⚠️ Déclarer un Nouveau Risque</button>
+                </div>
+            </div>
+
+            <div id="risks-table-container">
+                <table id="risks-table">
+                    <thead>
+                        <tr>
+                            <th>Projet</th>
+                            <th>Département</th>
+                            <th>Objectifs Clés</th>
+                            <th>Niveau de Risque</th>
+                            <th>Détail du Risque</th>
+                            <th>Actions Décidées</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-risk-id="1">
+                            <td>Refonte ERP Module Finance</td>
+                            <td>Finance</td>
+                            <td>
+                                <div>- Cibler l'international.</div>
+                                <div>- Automatiser 80% des tâches.</div>
+                            </td>
+                            <td><span class="risk-level level-high">Élevé</span></td>
+                            <td>
+                                <div>**Budget :** Dépassement de 15%.</div>
+                                <div>**Alignement :** Non-conformité future (normes fiscales).</div>
+                            </td>
+                            <td>
+                                <div>- **Modifier :** Augmentation du budget de 10%.</div>
+                                <div>- **Décision :** Demander l'avis externe sur l'alignement.</div>
+                            </td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                        
+                        <tr data-risk-id="2">
+                            <td>Développement App Mobile RH</td>
+                            <td>Ressources Humaines</td>
+                            <td>
+                                <div>- Améliorer l'engagement des employés.</div>
+                            </td>
+                            <td><span class="risk-level level-medium">Moyen</span></td>
+                            <td>
+                                <div>**Portée :** Demandes fonctionnelles client excessives.</div>
+                                <div>**Délai :** Retard potentiel de 2 mois.</div>
+                            </td>
+                            <td>
+                                <div>- **Suspendre :** Mise en pause pour réévaluer le cahier des charges.</div>
+                            </td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                         
+                        <tr data-risk-id="3">
+                            <td>Maintenance Réseau & Sécurité</td>
+                            <td>IT</td>
+                            <td>
+                                <div>- Assurer la disponibilité 99.9%.</div>
+                            </td>
+                            <td><span class="risk-level level-low">Faible</span></td>
+                            <td>
+                                <div>**Technique :** Défaillance mineure d'un serveur redondant.</div>
+                            </td>
+                            <td>
+                                <div>- **Corriger :** Remplacement immédiat du matériel.</div>
+                            </td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <hr>
+
+    <div id="risk-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Déclarer un Risque sur Projet</h2>
+            
+            <form id="risk-form">
+                <input type="hidden" id="risk_id" name="id">
+                
+                <div class="form-group-grid">
+                    <div class="form-column">
+                        <h3>Identification</h3>
+                        
+                        <label for="risk_project">Projet Concerné (*):</label>
+                        <select id="risk_project" name="project" required>
+                            <option value="">-- Sélectionner un projet --</option>
+                            <option value="Refonte ERP">Refonte ERP Module Finance</option>
+                            <option value="App Mobile RH">Développement App Mobile RH</option>
+                            <option value="Maintenance Réseau">Maintenance Réseau & Sécurité</option>
+                            </select>
+                        
+                        <label for="risk_department">Département Pilote (*):</label>
+                        <select id="risk_department" name="department" required>
+                            <option value="Finance">Finance</option>
+                            <option value="RH">Ressources Humaines</option>
+                            <option value="IT">Informatique</option>
+                        </select>
+                        
+                        <label for="risk_level">Niveau de Risque (*):</label>
+                        <select id="risk_level" name="level" required>
+                            <option value="Élevé">Élevé (Rouge)</option>
+                            <option value="Moyen">Moyen (Orange)</option>
+                            <option value="Faible">Faible (Vert)</option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-column">
+                        <h3>Objectifs & Détails</h3>
+                        
+                        <label for="risk_objectives">Objectifs du Projet (Liste, une par ligne):</label>
+                        <textarea id="risk_objectives" name="objectives" rows="4" placeholder="Ex: Cibler un autre secteur de client&#10;Agrandir l'échelle d'entreprise"></textarea>
+                        
+                        <label for="risk_details">Détail et Origine du Risque (*):</label>
+                        <textarea id="risk_details" name="details" rows="4" required placeholder="Ex: Risque au niveau du budget (Dépassement de 15%) ou de l'alignement."></textarea>
+                    </div>
+                </div>
+                
+                <label for="risk_actions_decided">Actions Correctives Décidées (*):</label>
+                <textarea id="risk_actions_decided" name="actionsDecided" rows="4" required placeholder="Ex: Suspendre le projet pour réévaluation&#10;Modifier le budget et re-négocier le scope"></textarea>
+
+                <button type="submit" class="add-btn submit-btn" id="submit-risk-btn">Enregistrer le Risque</button>
+                <button type="button" class="action-btn edit-btn" id="cancel-modal-btn">Annuler</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-alert" class="modal">
+        <div class="modal-content alert-box">
+            <h2 class="alert-title">Confirmation de Suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer ce Risque stratégique ?</p>
+            <div class="alert-actions">
+                <button id="confirm-delete-btn" class="action-btn delete-btn">Oui, Supprimer</button>
+                <button id="cancel-delete-btn" class="action-btn edit-btn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.getElementById('risks-table');
+            const searchBar = document.getElementById('search-bar');
+            
+            const modal = document.getElementById('risk-modal');
+            const deleteAlert = document.getElementById('delete-alert');
+            const addBtn = document.getElementById('add-risk-btn');
+            const closeBtn = document.querySelector('#risk-modal .close-btn');
+            const modalTitle = document.getElementById('modal-title');
+            const riskForm = document.getElementById('risk-form');
+            const submitBtn = document.getElementById('submit-risk-btn');
+            
+            let riskIdToDelete = null; 
+
+            // --- Fonctions Modale (Ajout/Modification) ---
+            const openModal = (mode, data = {}) => {
+                riskForm.reset();
+                if (mode === 'add') {
+                    modalTitle.textContent = "Déclarer un Nouveau Risque";
+                    submitBtn.textContent = "Enregistrer le Risque";
+                    document.getElementById('risk_id').value = ''; 
+                } else if (mode === 'edit') {
+                    modalTitle.textContent = `Modifier le Risque pour ${data.project || 'Sélectionné'}`;
+                    submitBtn.textContent = "Sauvegarder les Modifications";
+                    
+                    // Simulation de chargement des données
+                    document.getElementById('risk_id').value = data.id;
+                    document.getElementById('risk_project').value = data.project;
+                    document.getElementById('risk_department').value = data.department;
+                    document.getElementById('risk_level').value = data.level;
+                    document.getElementById('risk_details').value = data.details.replace(/<div>|<\/div>/g, '').trim(); 
+                    document.getElementById('risk_actions_decided').value = data.actions.replace(/<div>|<\/div>/g, '').trim();
+                }
+                modal.style.display = "block";
+            };
+
+            const closeModal = () => {
+                modal.style.display = "none";
+            };
+
+            addBtn.addEventListener('click', () => openModal('add'));
+            closeBtn.addEventListener('click', closeModal);
+            document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+                if (event.target == deleteAlert) {
+                    deleteAlert.style.display = "none";
+                }
+            }
+            
+            riskForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const riskId = document.getElementById('risk_id').value;
+                const action = riskId ? 'Modification' : 'Ajout';
+                
+                alert(`${action} du Risque soumise (API call to be implemented) !`);
+                closeModal();
+            });
+
+            // --- Gestion des Actions du Tableau ---
+
+            searchBar.addEventListener('keyup', () => {
+                const filter = searchBar.value.toLowerCase();
+                table.querySelectorAll('tbody tr').forEach(row => {
+                    const project = row.cells[0].textContent.toLowerCase();
+                    const department = row.cells[1].textContent.toLowerCase();
+                    
+                    if (project.includes(filter) || department.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            table.querySelectorAll('tbody tr').forEach(row => {
+                
+                // Clic sur Modifier
+                row.querySelector('.edit-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    
+                    // Récupération des données simulées
+                    const data = {
+                        id: row.dataset.riskId,
+                        project: row.cells[0].textContent,
+                        department: row.cells[1].textContent,
+                        // Les contenus des cellules (Détails du Risque et Actions) sont récupérés en brut
+                        level: row.cells[3].textContent.trim(), 
+                        details: row.cells[4].innerHTML, 
+                        actions: row.cells[5].innerHTML
+                    };
+                    openModal('edit', data);
+                });
+
+                // Clic sur Supprimer (Ouvrir l'alerte)
+                row.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    riskIdToDelete = row.dataset.riskId;
+                    deleteAlert.style.display = "block";
+                });
+            });
+
+            // Confirmation de suppression
+            document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+                alert(`Suppression du Risque ID ${riskIdToDelete} confirmée (API call to be implemented)!`);
+                deleteAlert.style.display = "none";
+            });
+
+            // Annulation de suppression
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+                deleteAlert.style.display = "none";
+                riskIdToDelete = null;
+            });
+        });
+    </script>
+</body>
+</html>

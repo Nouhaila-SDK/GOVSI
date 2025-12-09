@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI - Directeur - Historique et Audit</title>
+    
+    <style>
+        /* 🎨 DÉBUT DU CODE CSS (Réutilisation des styles GSI) */
+        :root {
+            --color-primary: #3d5a80;   
+            --color-secondary: #f4f1de; 
+            --color-text: #333333;
+            --color-success: #4CAF50;
+            --color-warning: #FFC107;
+            --color-danger: #D32F2F;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-primary);
+        }
+
+        #header-bar {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center; 
+        }
+
+        main {
+            max-width: 1500px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: block; 
+        }
+
+        #audit-section {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #ffffff 50%, #eff2f8 100%); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        /* Contrôles de Filtre */
+        #controls-bar {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+        }
+
+        #controls-bar select, #controls-bar input[type="text"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+
+        /* Tableau d'Audit */
+        #audit-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white; 
+            border-radius: 6px;
+            overflow: hidden; 
+        }
+
+        #audit-table th {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        #audit-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 14px;
+        }
+        
+        #audit-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Styles spécifiques aux types d'action */
+        .action-type {
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .action-create { background-color: var(--color-success); color: white; }
+        .action-update { background-color: #007bff; color: white; } /* Bleu */
+        .action-delete { background-color: var(--color-danger); color: white; }
+        .action-assign { background-color: var(--color-warning); color: var(--color-text); } /* Jaune pour l'affectation */
+
+        /* Styles de détail des changements */
+        .change-detail {
+            white-space: pre-wrap; /* Maintient les sauts de ligne si saisis */
+            font-family: monospace;
+            background-color: #f7f7f7;
+            padding: 5px;
+            border-radius: 3px;
+            display: inline-block;
+            max-width: 100%;
+            overflow-x: auto;
+        }
+
+    </style>
+</head>
+<body>
+    <header id="header-bar">
+        <span>Gouvernance SI - Historique et Piste d'Audit</span>
+    </header>
+
+    <main>
+        <section id="audit-section">
+            
+            
+            <div id="controls-bar">
+                <input type="text" id="filter-user" placeholder="Filtrer par Utilisateur...">
+                <select id="filter-type">
+                    <option value="">Tous les Types d'Action</option>
+                    <option value="Création">Création</option>
+                    <option value="Modification">Modification</option>
+                    <option value="Suppression">Suppression</option>
+                    <option value="Affectation">Affectation</option>
+                </select>
+                <input type="text" id="filter-entity" placeholder="Filtrer par Entité (Projet/Ressource)...">
+            </div>
+
+            <div id="audit-table-container">
+                <table id="audit-table">
+                    <thead>
+                        <tr>
+                            <th>Date / Heure</th>
+                            <th>Utilisateur</th>
+                            <th>Type d'Action</th>
+                            <th>Entité Modifiée</th>
+                            <th>Détail de l'Action</th>
+                            <th>Date d'Affectation (Ressource)</th> </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-12-08 10:05:30</td>
+                            <td>Directeur</td>
+                            <td><span class="action-type action-create">Création</span></td>
+                            <td>Ressource: Serveur Gamma</td>
+                            <td>Nouvelle ressource ajoutée au stock (Qté: 5).</td>
+                            <td>N/A</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>2025-12-08 10:15:45</td>
+                            <td>Chef de Projet RH</td>
+                            <td><span class="action-type action-assign">Affectation</span></td>
+                            <td>Ressource: 1 x Licence Dev Mobile</td>
+                            <td>Affecté au **Projet App Mobile RH**.</td>
+                            <td>**2025-12-08**</td> </tr>
+                        
+                        <tr>
+                            <td>2025-12-08 11:00:10</td>
+                            <td>Directeur</td>
+                            <td><span class="action-type action-update">Modification</span></td>
+                            <td>Projet: Refonte ERP Module Finance</td>
+                            <td><div class="change-detail">Changement de statut: De 'En Cours' à **'Suspendu'**</div></td>
+                            <td>N/A</td>
+                        </tr>
+                        
+                        <tr>
+                            <td>2025-12-08 11:30:22</td>
+                            <td>Gestionnaire Stock</td>
+                            <td><span class="action-type action-assign">Affectation</span></td>
+                            <td>Ressource: 2 x Écran 27 pouces</td>
+                            <td>Affecté au **Département Commercial**.</td>
+                            <td>**2025-12-08**</td> </tr>
+                        
+                        <tr>
+                            <td>2025-12-08 12:40:00</td>
+                            <td>Chef de Projet Finance</td>
+                            <td><span class="action-type action-create">Création</span></td>
+                            <td>Risque: Budget ERP</td>
+                            <td>Risque **Élevé** déclaré sur le dépassement budgétaire.</td>
+                            <td>N/A</td>
+                        </tr>
+
+                        <tr>
+                            <td>2025-12-08 14:00:00</td>
+                            <td>Gestionnaire Stock</td>
+                            <td><span class="action-type action-delete">Suppression</span></td>
+                            <td>Ressource: Imprimante Réseau RH</td>
+                            <td>Ressource déclarée en panne et **retirée du stock**.</td>
+                            <td>N/A</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tableBody = document.querySelector('#audit-table tbody');
+            const filterUser = document.getElementById('filter-user');
+            const filterType = document.getElementById('filter-type');
+            const filterEntity = document.getElementById('filter-entity');
+            const rows = Array.from(tableBody.querySelectorAll('tr'));
+
+            const applyFilters = () => {
+                const userFilter = filterUser.value.toLowerCase();
+                const typeFilter = filterType.value.toLowerCase();
+                const entityFilter = filterEntity.value.toLowerCase();
+
+                rows.forEach(row => {
+                    const user = row.cells[1].textContent.toLowerCase();
+                    const type = row.cells[2].textContent.toLowerCase();
+                    const entity = row.cells[3].textContent.toLowerCase();
+
+                    const matchUser = !userFilter || user.includes(userFilter);
+                    const matchType = !typeFilter || type.includes(typeFilter);
+                    const matchEntity = !entityFilter || entity.includes(entityFilter);
+
+                    if (matchUser && matchType && matchEntity) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            };
+
+            filterUser.addEventListener('keyup', applyFilters);
+            filterType.addEventListener('change', applyFilters);
+            filterEntity.addEventListener('keyup', applyFilters);
+        });
+    </script>
+</body>
+</html>

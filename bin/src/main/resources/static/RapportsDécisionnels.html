@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI - Rapports Décisionnels</title>
+    <style>
+        /* 🎨 DÉBUT DU CODE CSS (Style Cohérent) */
+        :root {
+            --color-primary: #3d5a80; /* Bleu foncé */
+            --color-secondary: #f4f1de; /* Crème/Fond léger */
+            --color-text: #333333;
+            --color-success: #4CAF50;
+            --color-warning: #FFC107;
+            --color-danger: #D32F2F;
+            --color-card-bg: #ffffff;
+            --color-card-shadow: rgba(0, 0, 0, 0.08);
+            --color-accent-blue: #709fb0; /* Bleu clair pour les graphiques/titres secondaires */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-primary);
+        }
+
+        /* --- Entête de page --- */
+        #header-bar {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #header-title {
+            flex-grow: 1; 
+            text-align: center;
+        }
+
+        #header-icons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .header-icon-link {
+            text-decoration: none;
+            color: var(--color-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .header-icon-link:hover { color: #b0c4de; }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: var(--color-danger);
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 10px;
+            line-height: 1;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        /* --- Fin Entête --- */
+
+        main {
+            max-width: 1400px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        /* --- Menu de Navigation (Cohérence avec le Dashboard) --- */
+        #dashboard-nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: var(--color-card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px var(--color-card-shadow);
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            border: 1px solid var(--color-primary);
+        }
+
+        .nav-link:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .nav-link.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        /* --- Fin Menu de Navigation --- */
+
+        /* --- Structure des Rapports (RapportsGrid) --- */
+        #reports-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* Un grand rapport et un petit à droite */
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        #reports-full-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .report-card {
+            background-color: var(--color-card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px var(--color-card-shadow);
+            border-left: 5px solid var(--color-accent-blue);
+            min-height: 300px;
+        }
+        
+        .report-card.critical {
+            border-left: 5px solid var(--color-danger);
+        }
+
+        .report-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: var(--color-accent-blue);
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .report-card.critical h3 {
+            color: var(--color-danger);
+        }
+
+        /* Simulation de Graphique/Analyse */
+        .chart-simulation {
+            text-align: center;
+            padding: 40px 10px;
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            font-size: 14px;
+            color: grey;
+            border: 1px dashed #ccc;
+        }
+
+        /* Liste de Projets à Risque */
+        .risk-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+        .risk-list li {
+            background-color: #ffe6e6; 
+            color: var(--color-danger);
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .risk-level {
+            background-color: var(--color-danger);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        /* 🎨 FIN DU CODE CSS */
+    </style>
+</head>
+<body>
+    <header id="header-bar">
+        <a href="dash.html" class="header-icon-link" title="Retour au Dashboard">
+            🏠
+        </a> 
+        
+        <span id="header-title">📈 Rapports Décisionnels Stratégiques</span>
+
+        <div id="header-icons">
+            <span id="notification-icon" class="header-icon-link" onclick="alert('3 Notifications importantes: 2 projets à Haut Risque, 1 ressource critique faible.')">
+                🔔
+                <span class="notification-badge">3</span> 
+            </span>
+
+            <span class="header-icon-link" title="Rapports Décisionnels">
+                📈
+            </span>
+        </div>
+    </header>
+
+    <main>
+        
+        <nav id="dashboard-nav">
+            <a href="dash.html" class="nav-link">🏠 Dashboard</a>
+            <a href="directeur1.html" class="nav-link">📋 Gestion des Projets</a>
+            <a href="Ressources.html" class="nav-link">💻 Gestion des Ressources</a>
+            <a href="Risques.html" class="nav-link">⚠️ Suivi des Risques</a>
+            <a href="Historique.html" class="nav-link">📜 Historique & Archives</a>
+        </nav>
+        
+        <hr>
+
+        <h2>Analyses Critiques et Synthèses</h2>
+
+        <section id="reports-grid">
+            
+            <div class="report-card critical">
+                <h3>⚠️ Projets Nécessitant une Attention Immédiate</h3>
+                <p>Liste des projets dont le niveau de risque est supérieur à 3/5 ou le dépassement de budget > 10%.</p>
+                <ul class="risk-list">
+                    <li>Refonte ERP Module Finance <span class="risk-level">Risque 4/5</span></li>
+                    <li>Développement App Mobile RH <span class="risk-level">Risque 3/5</span></li>
+                </ul>
+                <div style="margin-top: 20px; font-size: 14px;">
+                    **Action Recommandée :** Plan de mitigation pour l'ERP d'ici la fin de la semaine.
+                </div>
+            </div>
+
+            <div class="report-card">
+                <h3>💰 Résumé Budgétaire (Tendance)</h3>
+                <div class="chart-simulation" style="min-height: 250px;">
+                    [Graphique Simulé: Barres Budget Alloué vs Consommé]
+                    <p>Consommation moyenne actuelle: **85%** du budget global.</p>
+                </div>
+            </div>
+            
+        </section>
+        
+        <section id="reports-full-row">
+
+             <div class="report-card">
+                <h3>🚀 Performance des Départements (Objectifs Atteints)</h3>
+                <div class="chart-simulation">
+                    [Graphique Simulé: Jauge/Barres Objectifs par Dép.]
+                    <ul class="details-list" style="margin-top: 0;">
+                        <li><span>Finance (ERP):</span> <strong>65%</strong></li>
+                        <li><span>Commercial (CRM):</span> <strong>100%</strong></li>
+                        <li><span>RH (Mobile App):</span> <strong>15%</strong></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="report-card">
+                <h3>💻 Taux d'Affectation des Ressources</h3>
+                <div class="chart-simulation">
+                    [Graphique Simulé: Camembert des Ressources affectées / libres]
+                    <ul class="details-list" style="margin-top: 0;">
+                        <li><span>Ressources Matérielles affectées:</span> <strong>80%</strong></li>
+                        <li><span>Ressources Humaines affectées:</span> <strong>75%</strong></li>
+                        <li><span>Ressources critiques (Licences) restantes:</span> <strong style="color: var(--color-warning);">Faible (5 unités)</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logique de navigation rapide (retour au Dashboard)
+            const dashboardIcon = document.querySelector('#header-bar a[href="dashboard.html"]');
+            if (dashboardIcon) {
+                // S'assurer que le lien de retour est visible
+            }
+            
+            // Logique pour mettre en évidence le lien "Rapports Décisionnels" si la page était dans le nav
+            // Étant donné que le lien Rapports est dans l'entête, nous allons juste marquer le lien Dashboard
+            // comme non actif et les autres.
+
+            // Simulation d'action de notification (clic sur l'icône de cloche)
+            document.getElementById('notification-icon').addEventListener('click', function() {
+                // Dans une application réelle, cela ouvrirait une modale ou un panneau de notifications.
+            });
+        });
+    </script>
+</body>
+</html>

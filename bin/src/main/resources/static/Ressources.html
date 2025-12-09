@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSI - Directeur - Gestion des Ressources</title>
+    
+    <style>
+        /* 🎨 DÉBUT DU CODE CSS COMPLET ET CORRIGÉ */
+        /* Variables de Couleur */
+        :root {
+            --color-primary: #3d5a80;   
+            --color-secondary: #f4f1de; 
+            --color-text: #333333;
+            --color-success: #4CAF50;
+            --color-warning: #FFC107;
+            --color-danger: #D32F2F;
+            --color-danger-sable: #d9534f; 
+        }
+
+        /* Base et Typographie */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            color: var(--color-primary);
+        }
+
+        /* En-tête */
+        #header-bar {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 15px 40px;
+            font-size: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center; 
+        }
+
+        /* Layout Principal */
+        main {
+            max-width: 1500px;
+            margin: 25px auto;
+            padding: 0 20px;
+            display: block; 
+        }
+
+        /* Section Tableau avec Gradient */
+        #resource-crud-section {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #ffffff 50%, #eff2f8 100%); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+
+        /* Contrôles */
+        #controls-bar {
+            display: flex;
+            justify-content: flex-end; 
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-primary);
+            padding-bottom: 15px;
+        }
+
+        .search-add-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #search-bar {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+            transition: border-color 0.3s;
+        }
+
+        .add-btn {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s, opacity 0.3s;
+        }
+
+        .add-btn:hover:not(:disabled) {
+            background-color: #2a3c50; 
+        }
+
+        /* Tableau des Ressources */
+        #resources-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white; 
+            border-radius: 6px;
+            overflow: hidden; 
+        }
+
+        #resources-table th {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        #resources-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eeeeee;
+            transition: background-color 0.2s;
+        }
+
+        /* Cellule d'Actions : Assurer l'alignement horizontal des boutons */
+        #resources-table td:last-child { 
+            white-space: nowrap; 
+            display: flex; 
+            gap: 5px; 
+            padding: 12px 5px 12px 15px; 
+        }
+
+        #resources-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* Contenu des cellules d'affectation pour une meilleure lisibilité */
+        #resources-table td div {
+            padding: 2px 0;
+            font-size: 13px;
+        }
+
+
+        /* Styles CRUD Spécifiques */
+        .action-btn {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            font-size: 13px;
+        }
+
+        .edit-btn {
+            border: 1px solid var(--color-primary);
+            background-color: white;
+            color: var(--color-primary);
+        }
+
+        .edit-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-secondary);
+        }
+
+        .delete-btn {
+            border: 1px solid var(--color-danger-sable);
+            background-color: var(--color-danger-sable);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #c9302c; 
+        }
+        
+        /* Pastilles pour l'état du stock */
+        .stock-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+        }
+        .stock-ok { background-color: var(--color-success); }
+        .stock-warning { background-color: var(--color-warning); color: var(--color-text); }
+        .stock-critical { background-color: var(--color-danger); }
+
+
+        /* Styles Modales */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000; 
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4); 
+        }
+
+        .modal-content {
+            background-color: var(--color-secondary);
+            margin: 5% auto; 
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            border-top: 5px solid var(--color-primary);
+        }
+        
+        .large-modal {
+            max-width: 900px; 
+            width: 90%;
+        }
+
+        .close-btn {
+            color: var(--color-primary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-btn:hover, .close-btn:focus {
+            color: var(--color-text);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #resource-form label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--color-primary);
+            font-size: 14px;
+        }
+
+        #resource-form input[type="text"], 
+        #resource-form input[type="number"],
+        #resource-form input[type="date"],
+        #resource-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        .submit-btn {
+            margin-top: 20px;
+            width: 45%;
+            padding: 12px;
+            margin-right: 10px;
+        }
+        
+        #resource-form #cancel-modal-btn {
+            width: 45%;
+            background-color: #ccc;
+            color: var(--color-text);
+            border: 1px solid #aaa;
+            padding: 10px 20px;
+        }
+
+        /* Mise en page en Grille pour les colonnes du formulaire */
+        .form-group-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Style de la boîte d'alerte de suppression */
+        .alert-box {
+            text-align: center;
+            max-width: 400px;
+            border-top: 5px solid var(--color-danger-sable);
+        }
+
+        .alert-title {
+            color: var(--color-danger-sable);
+        }
+
+        .alert-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        #confirm-delete-btn, #cancel-delete-btn {
+            width: 45%;
+            padding: 10px;
+        }
+        /* 🎨 FIN DU CODE CSS COMPLET ET CORRIGÉ */
+    </style>
+</head>
+<body>
+    <header id="header-bar">
+        <span>Gouvernance SI - Gestion des Ressources</span>
+    </header>
+
+    <main>
+        <section id="resource-crud-section">
+            <div id="controls-bar">
+                <div class="search-add-group">
+                    <input type="text" id="search-bar" placeholder="Rechercher par Nom ou Type de Ressource...">
+                    <button class="add-btn" id="add-resource-btn">➕ Ajouter une Ressource</button>
+                </div>
+            </div>
+
+            <div id="resources-table-container">
+                <table id="resources-table">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Type</th>
+                            <th>Stock Total</th>
+                            <th>Stock Alerte</th>
+                            <th>Affecté (Dépts)</th>
+                            <th>Affecté (Projets)</th>
+                            <th>Date Acquisition</th>
+                            <th>Date Entrée Stock</th> <th>État du Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-resource-id="1">
+                            <td>Serveur Alpha Web</td>
+                            <td>Matériel</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>
+                                <div>1 x <strong>Dép. IT</strong></div>
+                            </td>
+                            <td>
+                                <div>1 x <strong>Pjt. Refonte ERP</strong></div>
+                            </td>
+                            <td>15/03/2023</td>
+                            <td>15/05/2023</td> <td><span class="stock-status stock-warning">Faible</span></td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                        <tr data-resource-id="2">
+                            <td>Licence MS Office 365</td>
+                            <td>Logiciel</td>
+                            <td>150</td>
+                            <td>20</td>
+                            <td>
+                                <div>70 x <strong>Dép. Commercial</strong></div>
+                                <div>50 x <strong>Dép. Finance</strong></div>
+                                <div>10 x <strong>Dép. RH</strong></div>
+                            </td>
+                            <td>--</td> 
+                            <td>01/01/2025</td>
+                            <td>05/01/2025</td> <td><span class="stock-status stock-ok">OK</span></td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                        <tr data-resource-id="3">
+                            <td>Imprimante Réseau RH</td>
+                            <td>Matériel</td>
+                            <td>0</td>
+                            <td>1</td>
+                            <td>
+                                <div>1 x <strong>Dép. RH</strong></div>
+                            </td>
+                            <td>--</td>
+                            <td>10/11/2024</td>
+                            <td>15/11/2024</td> <td><span class="stock-status stock-critical">Rupture</span></td>
+                            <td>
+                                <button class="action-btn edit-btn">Modifier</button>
+                                <button class="action-btn delete-btn">Supprimer</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="resource-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title">Ajouter une Nouvelle Ressource</h2>
+            
+            <form id="resource-form">
+                <input type="hidden" id="resource_id" name="id">
+                
+                <div class="form-group-grid">
+                    <div class="form-column">
+                        <h3>Détails Généraux</h3>
+                        
+                        <label for="resource_nom">Nom de la Ressource (*):</label>
+                        <input type="text" id="resource_nom" name="nom" required>
+                        
+                        <label for="resource_type">Type (*):</label>
+                        <select id="resource_type" name="type" required>
+                            <option value="Matériel">Matériel</option>
+                            <option value="Logiciel">Logiciel / Licence</option>
+                            <option value="Licence">Autre</option>
+                        </select>
+                        
+                        <label for="resource_stock_total">Nombre total en Stock (*):</label>
+                        <input type="number" id="resource_stock_total" name="stockTotal" required min="0">
+
+                        <label for="resource_stock_alerte">Seuil d'Alerte (*):</label>
+                        <input type="number" id="resource_stock_alerte" name="stockAlerte" required min="0">
+
+                    </div>
+
+                    <div class="form-column">
+                        <h3>Affectation et Suivi</h3>
+                        
+                        <label for="resource_date_acquisition">Date d'Acquisition (*):</label>
+                        <input type="date" id="resource_date_acquisition" name="dateAcquisition" required>
+                        
+                        <label for="resource_date_entree_stock">Date d'Entrée au Stock (*):</label> <input type="date" id="resource_date_entree_stock" name="dateEntreeStock" required> <label for="resource_localisation">Localisation (Entrepôt / Serveur):</label>
+                        <input type="text" id="resource_localisation" name="localisation">
+                    </div>
+                </div>
+                
+                <button type="submit" class="add-btn submit-btn" id="submit-resource-btn">Enregistrer</button>
+                <button type="button" class="action-btn edit-btn" id="cancel-modal-btn">Annuler</button>
+
+            </form>
+        </div>
+    </div>
+
+    <div id="delete-alert" class="modal">
+        <div class="modal-content alert-box">
+            <h2 class="alert-title">Confirmation de Suppression</h2>
+            <p>Êtes-vous sûr de vouloir supprimer la ressource <strong id="resource-to-delete-name">Nom de la Ressource</strong> ?</p>
+            <div class="alert-actions">
+                <button id="confirm-delete-btn" class="action-btn delete-btn">Oui, Supprimer</button>
+                <button id="cancel-delete-btn" class="action-btn edit-btn">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const table = document.getElementById('resources-table');
+            const searchBar = document.getElementById('search-bar');
+            
+            const modal = document.getElementById('resource-modal');
+            const deleteAlert = document.getElementById('delete-alert');
+            const addBtn = document.getElementById('add-resource-btn');
+            const closeBtn = document.querySelector('#resource-modal .close-btn');
+            const modalTitle = document.getElementById('modal-title');
+            const resourceForm = document.getElementById('resource-form');
+            const submitBtn = document.getElementById('submit-resource-btn');
+            
+            let resourceIdToDelete = null; 
+
+            // --- Fonctions Modale (Ajout/Modification) ---
+            const openModal = (mode, data = {}) => {
+                resourceForm.reset();
+                if (mode === 'add') {
+                    modalTitle.textContent = "Ajouter une Nouvelle Ressource";
+                    submitBtn.textContent = "Créer la Ressource";
+                    document.getElementById('resource_id').value = ''; 
+                } else if (mode === 'edit') {
+                    modalTitle.textContent = `Modifier la Ressource: ${data.nom || 'Sélectionnée'}`;
+                    submitBtn.textContent = "Sauvegarder les Modifications";
+                    
+                    // Simulation de chargement des données
+                    document.getElementById('resource_id').value = data.id;
+                    document.getElementById('resource_nom').value = data.nom;
+                    document.getElementById('resource_type').value = data.type;
+                    document.getElementById('resource_stock_total').value = data.stockTotal;
+                    // Les données stockAlerte, dateAcquisition, etc. seraient chargées via API
+                    document.getElementById('resource_stock_alerte').value = 3; 
+                    // Pour le champ de date, il faudrait formater la date en YYYY-MM-DD
+                    // document.getElementById('resource_date_acquisition').value = format(data.dateAcquisition);
+                    // document.getElementById('resource_date_entree_stock').value = format(data.dateEntreeStock);
+                }
+                modal.style.display = "block";
+            };
+
+            const closeModal = () => {
+                modal.style.display = "none";
+            };
+
+            addBtn.addEventListener('click', () => openModal('add'));
+            closeBtn.addEventListener('click', closeModal);
+            document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+                if (event.target == deleteAlert) {
+                    deleteAlert.style.display = "none";
+                }
+            }
+            
+            resourceForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const resourceId = document.getElementById('resource_id').value;
+                const action = resourceId ? 'Modification' : 'Ajout';
+                
+                alert(`${action} de la ressource soumise (API call to be implemented) !`);
+                closeModal();
+            });
+
+            // --- Gestion des Actions du Tableau ---
+
+            searchBar.addEventListener('keyup', () => {
+                const filter = searchBar.value.toLowerCase();
+                table.querySelectorAll('tbody tr').forEach(row => {
+                    const nom = row.cells[0].textContent.toLowerCase();
+                    const type = row.cells[1].textContent.toLowerCase();
+                    
+                    if (nom.includes(filter) || type.includes(filter)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+
+            table.querySelectorAll('tbody tr').forEach(row => {
+                
+                // Clic sur Modifier
+                row.querySelector('.edit-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    
+                    // Récupération des données simulées
+                    const data = {
+                        id: row.dataset.resourceId,
+                        nom: row.cells[0].textContent,
+                        type: row.cells[1].textContent,
+                        stockTotal: row.cells[2].textContent,
+                        // Les vraies données viendront d'un appel API GET
+                    };
+                    openModal('edit', data);
+                });
+
+                // Clic sur Supprimer (Ouvrir l'alerte)
+                row.querySelector('.delete-btn').addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    resourceIdToDelete = row.dataset.resourceId;
+                    document.getElementById('resource-to-delete-name').textContent = row.cells[0].textContent;
+                    deleteAlert.style.display = "block";
+                });
+            });
+
+            // Confirmation de suppression
+            document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+                alert(`Suppression de la ressource ID ${resourceIdToDelete} confirmée (API call to be implemented)!`);
+                deleteAlert.style.display = "none";
+            });
+
+            // Annulation de suppression
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+                deleteAlert.style.display = "none";
+                resourceIdToDelete = null;
+            });
+        });
+    </script>
+</body>
+</html>
